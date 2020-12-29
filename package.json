@@ -1,0 +1,26 @@
+{
+  "name": "slack-support-bot",
+  "version": "0.0.0",
+  "description": "An on-call slack support bot",
+  "main": "src",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bchampp/slack-support-bot.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@slack/web-api": "^5.10.0",
+    "axios": "^0.21.1",
+    "dotenv": "^8.2.0",
+    "esm": "^3.2.25"
+  },
+  "bugs": {
+    "url": "https://github.com/bchampp/slack-support-bot/issues"
+  },
+  "homepage": "https://github.com/bchampp/slack-support-bot#readme"
+}
