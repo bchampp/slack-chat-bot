@@ -4,7 +4,6 @@ export function JiraIssueFormatter(data){
     console.log(ticket);
 
     const jiraIssue = {
-        update: {},
         fields: {
             project: {id: '14261'},//{name: ticket.project},
             summary: ticket.summary,
