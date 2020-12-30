@@ -1,34 +1,38 @@
-import { publishMessage } from './util/slack';
-// import {  getIssue } from './util/jira';
+import { publishCreateIssueMessage } from './util/slack';
+import {  createIssue } from './util/jira';
 import { addTicketToDynamo, getAllTickets, getTicket } from './util/dynamo';
 
 // Endpoint to create a new ticket and post a slack message
 export function create(event, context, callback) {
   const data = JSON.parse(event.body);
 
-  publishMessage(oncallChannel, data); // Return convo id somehow?
-  // getIssue(data);
-  // createIssue(data); // Return updated data
-  addTicketToDynamo(data);
+  // Creates Issue on JIRA
+  createIssue(data).then(() => {
+    // OnCall Bot Messages the Slack Channel
+    publishCreateIssueMessage(data).then(() => {
+      // Adds Ticket to DynamoDB
+      addTicketToDynamo(data);
 
-  const headers = {
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Credentials": true
-  };
+      const headers = {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Credentials": true
+      };
 
-  // Return status code 200 and the newly created item
-  const response = {
-    statusCode: 200,
-    headers: headers,
-    body: JSON.stringify(
-      {
-        message: 'Creating a ticket',
-      },
-      null,
-      2
-    ),
-  };
-  callback(null, response);
+      // Return status code 200 and the newly created item
+      const response = {
+        statusCode: 200,
+        headers: headers,
+        body: JSON.stringify(
+          {
+            message: 'Creating a ticket',
+          },
+          null,
+          2
+        ),
+      };
+      callback(null, response);
+    });
+  });
 }
 
 // Endpoint to get all tickets for a specific firm
@@ -89,7 +93,7 @@ export async function get(event, context, callback) {
           2
         )
       };
-    callback(null, response);
+      callback(null, response);
     });
   }
 }
