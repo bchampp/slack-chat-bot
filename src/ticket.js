@@ -2,8 +2,6 @@ import { publishMessage } from './util/slack';
 // import {  getIssue } from './util/jira';
 import { addTicketToDynamo, getAllTickets, getTicket } from './util/dynamo';
 
-const oncallChannel = "general";
-
 // Endpoint to create a new ticket and post a slack message
 export function create(event, context, callback) {
   const data = JSON.parse(event.body);
