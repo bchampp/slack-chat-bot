@@ -1,49 +1,77 @@
-// import { publishMessage } from './util/slack';
+import { publishMessage } from './util/slack';
 // import {  getIssue } from './util/jira';
-import { addTicketToDynamo } from './util/dynamo';
+import { addTicketToDynamo, getAllTickets, getTicket } from './util/dynamo';
 
 // Endpoint to create a new ticket and post a slack message
 export function create(event, context, callback) {
   const data = JSON.parse(event.body);
 
-  // publishMessage("general", data); // Return convo id somehow?
+  publishMessage("general", data); // Return convo id somehow?
   // getIssue(data);
   // createIssue(data); // Return updated data
   addTicketToDynamo(data);
 
-  return {
+  const headers = {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Credentials": true
+  };
+
+  // Return status code 200 and the newly created item
+  const response = {
     statusCode: 200,
+    headers: headers,
     body: JSON.stringify(
       {
         message: 'Creating a ticket',
-        input: event,
       },
       null,
       2
     ),
   };
+  callback(null, response);
 }
 
 // Endpoint to get all tickets for a specific firm
-export function get(event, context, callback) {
-  const fakeTickets = [];
-  for (var i = 0; i < 10; i++) {
-    const ticket = {
-      "name": "Can't set up SSO",
-      "link": "youtube.com",
-      "date": "12-05-2020",
-      "status": "In Progress"
+export async function get(event, context, callback) {
+  const data = JSON.parse(event.body);
+  if (!data.firmId) {
+    const response = {
+      statusCode: 400,
+      body: JSON.stringify(
+        {
+          message: "Please provide a firmId"
+        }
+      )
     };
-    fakeTickets.push(ticket);
+    callback(null, response);
   }
-  return {
-    body: JSON.stringify(
-      {
-        message: 'Getting all firm tickets',
-        tickets: fakeTickets
-      },
-      null,
-      2
-    )
-  };
+  if (data.ticketId) {
+    const response = await getTicket(data.firmId, data.ticketId).then(ticket => {
+      return {
+        statusCode: 200,
+        body: JSON.stringify(
+          {
+            message: "Getting specific firm ticket",
+            ticket: ticket
+          }
+        )
+      };
+    });
+    callback(null, response);
+  } else {
+    await getAllTickets(data.firmId).then(tickets => {
+      const response = {
+        statusCode: 200,
+        body: JSON.stringify(
+          {
+            message: 'Getting all firm tickets',
+            tickets: tickets
+          },
+          null,
+          2
+        )
+      };
+    callback(null, response);
+    });
+  }
 }

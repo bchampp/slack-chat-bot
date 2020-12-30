@@ -2,40 +2,9 @@ import dynamoDB from "dynamoose";
 import { TicketSchema } from "../models/ticket-schema";
 
 const ticketsTable = dynamoDB.model("support-bot-user-tickets", TicketSchema);
-const mockData = false;
-
-const fakeData = {
-    id: "CC-TEST",
-    userId: "djhdj-dsadasasd-asdsad-asds",
-    firmId: "djhdj-dsadasasd-asdsad-asds",
-    slackThreadId: "jkhfsds",
-    ticket:{
-        firstName: "Michael",
-        lastName: "Pereira",
-        project: "CC",
-        issueType: "Bug",
-        summary: "Something isnt working",
-        description: "What is happening",
-        affectedFirm: "AcmeCorp",
-        priority: "High",
-        component: "Comp",
-        usersIdentified: "12",
-        expectedBehavior: "this",
-        actualBehavior: "that",
-        recreationSteps: "that",
-        link: "https://google.ca/",
-        status: "Open",
-        date: "3827498",
-    }};
 
 export function addTicketToDynamo(data){
-    
-    if (mockData) {
-        data = fakeData;
-    }
-
     const ticket = data.ticket;
-
     ticketsTable.create({
         id: data.id,
         userId: data.userId,
@@ -68,11 +37,27 @@ export function addTicketToDynamo(data){
     });
 }
 
-export function getAllTickets(firmId) {
-    const ticketsTable = dynamoDB.model("support-bot-user-tickets", TicketSchema);
-    ticketsTable.get().then(result => {
-        console.log(result);
-    }).catch(error => {
-        console.log(error);
+export async function getAllTickets(firmId) {
+    const allTickets = [];
+    const unformattedTickets = await ticketsTable.scan().exec().catch(err => {
+        console.log(err);
     });
+    unformattedTickets.forEach(ticket => {
+        const formattedTicket = ticket.toJSON();
+        if (formattedTicket.firmId == firmId) {
+            const ticketObj = {
+                "id": ticket.id,
+                "name": ticket.ticket.summary,
+                "link": ticket.ticket.link,
+                "postDate": ticket.ticket.postDate,
+                "status": ticket.ticket.status,
+            };
+            allTickets.push(ticketObj);
+        }
+    });
+    return allTickets;
+}
+
+export async function getTicket(firmId, query) {
+    return {};
 }

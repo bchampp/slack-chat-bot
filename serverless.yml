@@ -5,18 +5,50 @@ frameworkVersion: '2'
 package:
   individually: true
 
-provider:
-  name: aws
-  runtime: nodejs12.x
-  stage: dev
-
 plugins:
   - serverless-bundle # Package our functions with Webpack
   - serverless-offline
   - serverless-dotenv-plugin # Load .env as environment variables
 
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: dev
+
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Scan
+        - dynamodb:Query
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+        - dynamodb:DescribeTable
+      # Restrict our IAM role permissions to
+      # the specific table for the stage
+      Resource: "arn:aws:dynamodb:*:*:*"
+      
 resources:
   Resources:
+    GatewayResponseDefault4XX:
+      Type: 'AWS::ApiGateway::GatewayResponse'
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
+        ResponseType: DEFAULT_4XX
+        RestApiId:
+          Ref: 'ApiGatewayRestApi'
+    GatewayResponseDefault5XX:
+      Type: 'AWS::ApiGateway::GatewayResponse'
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
+        ResponseType: DEFAULT_5XX
+        RestApiId:
+          Ref: 'ApiGatewayRestApi'
     SupportBot:
       Type: 'AWS::DynamoDB::Table'
       Properties:
@@ -46,15 +78,15 @@ functions:
     events: 
       - http:
           method: 'post'
-          path: 'ticket'
+          path: 'create-ticket'
   
   getTicket:
     handler: 'src/ticket.get'
     description: "Get all support tickets for a firm or a specific ticket ID"
     events:
       - http:
-          method: 'get'
-          path: 'ticket'
+          method: 'post'
+          path: 'get-ticket'
 
   postMessage:
     handler: 'src/conversation.post'
