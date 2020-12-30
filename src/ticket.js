@@ -1,9 +1,9 @@
 import { publishCreateIssueMessage } from './util/slack';
 import {  createIssue } from './util/jira';
-import { addTicketToDynamo, getAllTickets, getTicket } from './util/dynamo';
+import { addTicketToDynamo, deleteTicketFromDynamo, getAllTickets, getQueryTicket } from './util/dynamo';
 
 // Endpoint to create a new ticket and post a slack message
-export function create(event, context, callback) {
+export function createTicket(event, context, callback) {
   const data = JSON.parse(event.body);
 
   // Creates Issue on JIRA
@@ -36,7 +36,7 @@ export function create(event, context, callback) {
 }
 
 // Endpoint to get all tickets for a specific firm
-export async function get(event, context, callback) {
+export async function getTicket(event, context, callback) {
   const data = JSON.parse(event.body);
   if (!data.firmId) {
     const response = {
@@ -56,7 +56,7 @@ export async function get(event, context, callback) {
     callback(null, response);
   }
   if (data.ticketId) {
-    const response = await getTicket(data.firmId, data.ticketId).then(ticket => {
+    const response = await getQueryTicket(data.firmId, data.ticketId).then(ticket => {
       return {
         statusCode: 200,
         headers: {
@@ -95,5 +95,28 @@ export async function get(event, context, callback) {
       };
       callback(null, response);
     });
+  }
+}
+
+export async function deleteTicket(event, context, callback) {
+  const data = JSON.parse(event.body);
+  if (data.ticketId) {
+    deleteTicketFromDynamo(data.ticketId);
+  } else {
+    const response = {
+      statusCode: 400,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': true,
+        'Access-Control-Allow-Headers': '*',
+        'Acces-Control-Allow-Methods': '*'
+      },
+      body: JSON.stringify(
+        {
+          message: "Please provide a ticketId"
+        }
+      )
+    };
+    callback(null, response);
   }
 }

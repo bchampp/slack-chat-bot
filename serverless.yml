@@ -72,7 +72,7 @@ resources:
   
 functions:
   createTicket:
-    handler: 'src/ticket.create'
+    handler: 'src/ticket.createTicket'
     description: "Create a Jira ticket and post a slack message"
     events: 
       - http:
@@ -84,10 +84,10 @@ functions:
             - Access-Control-Allow-Credentials
             - Access-Control-Allow-Headers
             - Access-Control-Allow-Methods
-            - Acces-Control-Allow-Origin
+            - Access-Control-Allow-Origin
   
   getTicket:
-    handler: 'src/ticket.get'
+    handler: 'src/ticket.getTicket'
     description: "Get all support tickets for a firm or a specific ticket ID"
     events:
       - http:
@@ -99,8 +99,22 @@ functions:
             - Access-Control-Allow-Credentials
             - Access-Control-Allow-Headers
             - Access-Control-Allow-Methods
-            - Acces-Control-Allow-Origin
+            - Access-Control-Allow-Origin
 
+  deleteTicket:
+    handler: 'src/ticket.deleteTicket'
+    description: "Delete a given ticketId"
+    events:
+      - http:
+          method: 'post'
+          path: 'get-ticket'
+          cors:
+            origin: '*'
+            headers:
+            - Access-Control-Allow-Credentials
+            - Access-Control-Allow-Headers
+            - Access-Control-Allow-Methods
+            - Access-Control-Allow-Origin
 
   postMessage:
     handler: 'src/conversation.post'
@@ -115,7 +129,7 @@ functions:
             - Access-Control-Allow-Credentials
             - Access-Control-Allow-Headers
             - Access-Control-Allow-Methods
-            - Acces-Control-Allow-Origin
+            - Access-Control-Allow-Origin
 
   getMessages:
     handler: 'src/conversation.get'
@@ -130,4 +144,4 @@ functions:
             - Access-Control-Allow-Credentials
             - Access-Control-Allow-Headers
             - Access-Control-Allow-Methods
-            - Acces-Control-Allow-Origin
+            - Access-Control-Allow-Origin

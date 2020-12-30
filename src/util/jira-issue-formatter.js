@@ -1,6 +1,4 @@
 export function JiraIssueFormatter(data){
-    const ticket = data.ticket;
-
     const jiraIssue = {
         "fields":{
             "project":{

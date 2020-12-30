@@ -47,5 +47,3 @@ export function getIssue(ticket) {
     })
     .catch(error => console.log(error));
 }
-
-createIssue(fakeData);

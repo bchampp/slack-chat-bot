@@ -37,6 +37,10 @@ export function addTicketToDynamo(data){
     });
 }
 
+export function deleteTicketFromDynamo(id) {
+    ticketsTable.delete({id: id}).catch(err => console.log(err));
+}
+
 export async function getAllTickets(firmId) {
     const allTickets = [];
     const unformattedTickets = await ticketsTable.scan().exec().catch(err => {
@@ -58,7 +62,7 @@ export async function getAllTickets(firmId) {
     return allTickets;
 }
 
-export async function getTicket(firmId, query) {
+export async function getQueryTicket(firmId, query) {
     const unformattedTickets = await ticketsTable.scan().exec().catch(err => {
         console.log(err);
     });
