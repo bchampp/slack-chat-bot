@@ -59,5 +59,14 @@ export async function getAllTickets(firmId) {
 }
 
 export async function getTicket(firmId, query) {
+    const unformattedTickets = await ticketsTable.scan().exec().catch(err => {
+        console.log(err);
+    });
+    for(var i = 0; i < unformattedTickets.length; i++){
+        const formattedTicket = unformattedTickets[i].toJSON();
+        if (formattedTicket.firmId === firmId && formattedTicket.id === query) {
+            return formattedTicket;
+        }
+    }
     return {};
 }

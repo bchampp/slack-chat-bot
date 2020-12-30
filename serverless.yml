@@ -96,7 +96,7 @@ functions:
           method: 'post'
           path: 'conversation'
 
-  getConversation:
+  getConversations:
     handler: 'src/conversation.get'
     description: "Get a conversation from the database pertaining to a specific ticket"
     events: 
