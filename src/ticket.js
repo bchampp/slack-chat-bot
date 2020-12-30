@@ -7,9 +7,19 @@ export function createTicket(event, context, callback) {
   const data = JSON.parse(event.body);
 
   // Creates Issue on JIRA
-  createIssue(data).then(() => {
+  createIssue(data).then((response) => {
+    const jiraData = JSON.parse(response);
+
+    // Sets ticket Id and link to JIRA ticket
+    data.id = jiraData.key;
+    data.ticket.link = `https://bugs.caseware.com/browse/${jiraData.key}`;
+
     // OnCall Bot Messages the Slack Channel
-    publishCreateIssueMessage(data).then(() => {
+    publishCreateIssueMessage(data).then((slackThread) => {
+
+      // Sets the slack thread Id
+      data.slackThreadId = slackThread;
+
       // Adds Ticket to DynamoDB
       addTicketToDynamo(data);
 

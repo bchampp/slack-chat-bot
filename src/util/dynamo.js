@@ -5,6 +5,7 @@ const ticketsTable = dynamoDB.model("support-bot-user-tickets", TicketSchema);
 
 export function addTicketToDynamo(data){
     const ticket = data.ticket;
+
     ticketsTable.create({
         id: data.id,
         userId: data.userId,
@@ -26,7 +27,7 @@ export function addTicketToDynamo(data){
             recreationSteps: ticket.recreationSteps,
             link: ticket.link,
             status: ticket.status,
-            date: ticket.date,
+            date: ticket.date
         }
     })
     .then(result => {
