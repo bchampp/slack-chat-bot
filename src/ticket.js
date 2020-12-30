@@ -8,7 +8,7 @@ const oncallChannel = "general";
 export function create(event, context, callback) {
   const data = JSON.parse(event.body);
 
-  publishMessage("general", data); // Return convo id somehow?
+  publishMessage(oncallChannel, data); // Return convo id somehow?
   // getIssue(data);
   // createIssue(data); // Return updated data
   addTicketToDynamo(data);
