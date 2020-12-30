@@ -71,14 +71,20 @@ resources:
               ProjectionType: KEYS_ONLY
   
 functions:
-  # Ticket endpoints
   createTicket:
     handler: 'src/ticket.create'
     description: "Create a Jira ticket and post a slack message"
     events: 
       - http:
           method: 'post'
-          path: 'create-ticket'
+          path: 'post-ticket'
+          cors: 
+            origin: '*'
+            headers:
+            - Access-Control-Allow-Credentials
+            - Access-Control-Allow-Headers
+            - Access-Control-Allow-Methods
+            - Acces-Control-Allow-Origin
   
   getTicket:
     handler: 'src/ticket.get'
@@ -87,6 +93,14 @@ functions:
       - http:
           method: 'post'
           path: 'get-ticket'
+          cors: 
+            origin: '*'
+            headers:
+            - Access-Control-Allow-Credentials
+            - Access-Control-Allow-Headers
+            - Access-Control-Allow-Methods
+            - Acces-Control-Allow-Origin
+
 
   postMessage:
     handler: 'src/conversation.post'
@@ -94,12 +108,26 @@ functions:
     events: 
       - http:
           method: 'post'
-          path: 'conversation'
+          path: 'post-message'
+          cors: 
+            origin: '*'
+            headers:
+            - Access-Control-Allow-Credentials
+            - Access-Control-Allow-Headers
+            - Access-Control-Allow-Methods
+            - Acces-Control-Allow-Origin
 
-  getConversations:
+  getMessages:
     handler: 'src/conversation.get'
     description: "Get a conversation from the database pertaining to a specific ticket"
     events: 
       - http:
-          method: 'get'
-          path: 'conversation'
+          method: 'post'
+          path: 'get-message'
+          cors: 
+            origin: '*'
+            headers:
+            - Access-Control-Allow-Credentials
+            - Access-Control-Allow-Headers
+            - Access-Control-Allow-Methods
+            - Acces-Control-Allow-Origin

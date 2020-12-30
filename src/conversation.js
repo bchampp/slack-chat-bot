@@ -1,32 +1,51 @@
-import { findConversation } from './util/slack';
+import { getMessages, postInThread } from './util/slack';
 
-export function post(event, context, callback) {
-    return {
-        statusCode: 200,
-        body: JSON.stringify(
-          {
-            message: 'Posting a message',
-            input: event,
-          },
-          null,
-          2
-        ),
-      };
+const channel = "general";
+
+// Endpoint called from client to post a message on behalf of the client to a given thread
+export async function post(event, context, callback) {
+  if (!event.body) {
+    console.log("Please provide a body with thread and message");
+    const response = {
+      statusCode: 400,
+      body: JSON.stringify(
+        {
+          message: 'Thread or message not provided in request',
+        },
+        null,
+        2
+      ),
+    };
+    callback(null, response);
+  }
+  const data = JSON.parse(event.body);
+  postInThread(channel, data.thread, data.message);
+  const response = {
+    statusCode: 200,
+    body: JSON.stringify(
+      {
+        message: 'Posting message in thread',
+      },
+      null,
+      2
+    ),
+  };
+  callback(null, response);
 }
 
-export function get(event, context, callback) {
-  console.log("Test");
-  findConversation("general");
-  const response = {
-        statusCode: 200,
-        body: JSON.stringify(
-          {
-            message: 'Getting recent messages',
-            input: event,
-          },
-          null,
-          2
-        ),
-      };
+// Endpoint to get an array of all messages in a thread
+export async function get(event, context, callback) {
+  if (!event.body) {
+    console.log("Please provide a body with thread");
+    const response = {
+      statusCode: 400,
+      body: JSON.stringify(
+        {
+          message: 'Thread not provided in request',
+        },
+        null,
+        2
+      ),
+    };
     callback(null, response);
 }

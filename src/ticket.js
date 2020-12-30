@@ -39,6 +39,12 @@ export async function get(event, context, callback) {
   if (!data.firmId) {
     const response = {
       statusCode: 400,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': true,
+        'Access-Control-Allow-Headers': '*',
+        'Acces-Control-Allow-Methods': '*'
+      },
       body: JSON.stringify(
         {
           message: "Please provide a firmId"
@@ -51,6 +57,12 @@ export async function get(event, context, callback) {
     const response = await getTicket(data.firmId, data.ticketId).then(ticket => {
       return {
         statusCode: 200,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Credentials': true,
+          'Access-Control-Allow-Headers': '*',
+          'Acces-Control-Allow-Methods': '*'
+        },
         body: JSON.stringify(
           {
             message: "Getting specific firm ticket",
@@ -64,6 +76,12 @@ export async function get(event, context, callback) {
     await getAllTickets(data.firmId).then(tickets => {
       const response = {
         statusCode: 200,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Credentials': true,
+          'Access-Control-Allow-Headers': '*',
+          'Acces-Control-Allow-Methods': '*'
+        },
         body: JSON.stringify(
           {
             message: 'Getting all firm tickets',

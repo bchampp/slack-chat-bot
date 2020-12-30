@@ -56,6 +56,59 @@ export async function publishMessage(channel, data) {
   });
 }
 
+// Publish message in thread (this is users messages).
+export async function postInThread(channel, thread, message) {
+  if (!thread || !message) {
+    console.log("Please provide a thread stamp and msg to send!");
+  }
+  return client.chat.postMessage({
+    token: process.env.SLACK_OAUTH_TOKEN,
+    channel: channel,
+    text: message,
+    thread_ts: thread
+  });
+}
+
+// Return all messages from a given thread in a channel
+export async function getMessages(channel, threadStamp) {
+  return [];
+}
+
+export async function getChannelId(name) {
+  try {
+    const result = await client.conversations.list({
+      token: process.env.SLACK_OAUTH_TOKEN
+    });
+    for (const channel of result.channels) {
+      if (channel.name === name) {
+        let conversationId = channel.id;
+        return conversationId;
+      }
+    }
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export async function getMostRecentMessage(id) {
+  try {
+    // Call the conversations.history method using WebClient
+    const result = await client.conversations.history({
+      token: process.env.SLACK_OAUTH_TOKEN,
+      channel: id,
+      count: 1,
+    });
+
+    let conversationHistory = result.messages;
+
+    // Print results
+    console.log(conversationHistory);
+  }
+  catch (error) {
+    console.error(error);
+  }
+}
+
 export async function findConversation(name) {
   try {
     // Call the conversations.list method using the built-in WebClient
