@@ -1,26 +1,32 @@
 export function JiraIssueFormatter(data){
     const ticket = data.ticket;
 
-    console.log(ticket);
-
     const jiraIssue = {
-        fields: {
-            project: {id: '14261'},//{name: ticket.project},
-            summary: ticket.summary,
-            description: ticket.description,
-            issuetype: {id: '32'},//{name: ticket.issueType},
-            priority: {id: '4'}, //{name: ticket.priority},
-            customfield_15140: ticket.actualBehavior, //Actual Behavior
-            customfield_15151: ticket.expectedBehavior, //Expected Behavior
-            customfield_15160: ticket.recreationSteps, //Steps
-            customfield_15175: ticket.issueDate, //Date
-            customfield_15255: ticket.component, //Components
-            customfield_15155: ticket.usersIdentified, //Number of Users Identified
-            reporter: {name: 'michael.pereira'}
-        }
+        "fields":{
+            "project":{
+               "id":14261
+            },
+            "summary":"ticket.summary",
+            "description":"ticket.description",
+            "issuetype":{
+               "id":32
+            },
+            "customfield_15151":"ticket.expectedBehavior",
+            "customfield_15140":"ticket.actualBehavior",
+            "customfield_15160":"ticket.recreationSteps",
+            "customfield_15155": 5,
+            "customfield_15175":"ticket.issueDate",
+            "customfield_15255":{
+               "self":"https://bugs.caseware.com/rest/api/2/customFieldOption/31785",
+               "value":"Cloud 2.0",
+               "id":"31785",
+               "child":{
+                  "self":"https://bugs.caseware.com/rest/api/2/customFieldOption/31795",
+                  "value":"Firm Settings",
+                  "id":"31795"
+               }
+            }
+         }
     };
-
-    console.log(jiraIssue);
-
     return jiraIssue;
 }
