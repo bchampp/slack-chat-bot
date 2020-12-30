@@ -1,6 +1,7 @@
 /* Slack Support Bot Implementation */
 
 import { WebClient, LogLevel } from '@slack/web-api';
+import { getTicket } from './dynamo';
 
 // Configure client
 const client = new WebClient({
@@ -8,49 +9,200 @@ const client = new WebClient({
   logLevel: LogLevel.DEBUG
 });
 
-export async function publishMessage(id, data) {
+// Publish initial ticket published message and return timestamp
+export async function publishMessage(channel, data) {
+  return client.chat.postMessage({
+    token: process.env.SLACK_OAUTH_TOKEN,
+    channel: channel,
+    attachments: [
+      {
+        color: "#F8E419",
+        pretext: "Client Posted New Issue to JIRA",
+        title: `JIRA Ticket [${data.id}]`,
+        title_link: `${ticket.link}`,
+        text: data.summary,
+        fields: [
+          {
+            title: "Project",
+            value: ticket.project,
+            short: true
+          },
+          {
+            title: "Issue Type",
+            value: ticket.issueType,
+            short: true
+          },
+          {
+            title: "Priority",
+            value: ticket.priority,
+            short: true
+          },
+          {
+            title: "Affected Firm",
+            value: ticket.affectedFirm,
+            short: true
+          },
+          {
+            title: "Reported By",
+            value: `${ticket.firstName} ${ticket.lastName}`,
+            short: true
+          }
+        ],
+        ts: Date.now()
+      }
+    ]
+  }).then((message) => {
+    return message.ts;
+  });
+}
+
+// Publish message in thread (this is users messages).
+export async function postInThread(channel, thread, message) {
+  if (!thread || !message) {
+    console.log("Please provide a thread stamp and msg to send!");
+  }
+  return client.chat.postMessage({
+    token: process.env.SLACK_OAUTH_TOKEN,
+    channel: channel,
+    text: message,
+    thread_ts: thread
+  });
+}
+
+// Return all messages from a given thread in a channel
+export async function getMessages(channel, threadStamp) {
+  return [];
+}
+
+export async function getChannelId(name) {
   try {
-    // Call the chat.postMessage method using the built-in WebClient
-    const result = await client.chat.postMessage({
+    const result = await client.conversations.list({
+      token: process.env.SLACK_OAUTH_TOKEN
+    });
+    for (const channel of result.channels) {
+      if (channel.name === name) {
+        let conversationId = channel.id;
+        return conversationId;
+      }
+    }
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export async function getMostRecentMessage(id) {
+  try {
+    // Call the conversations.history method using WebClient
+    const result = await client.conversations.history({
       token: process.env.SLACK_OAUTH_TOKEN,
       channel: id,
-      attachments: [
-        {
-            color: "#F8E419",
-            pretext: "Client Posted New Issue to JIRA",
-            title: `JIRA Ticket [DIST-3357]`, //TODO: GET JIRA TICKET NUMBER
-            title_link: "https://bugs.caseware.com/",
-            text: data.summary,
-            fields: [
-                {
-                    title: "Project",
-                    value: data.project,
-                    short: true
-                },
-                {
-                    title: "Issue Type",
-                    value: data.issueType,
-                    short: true
-                },
-                {
-                    title: "Affected Firm",
-                    value: data.affectedFirm,
-                    short: true
-                },
-                {
-                  title: "Reported By",
-                  value: `${data.firstName} ${data.lastName}`,
-                  short: true
-              }
-            ],
-            ts: Date.now()
-        }
-    ]
+      count: 1,
     });
 
-    console.log(result);
+    let conversationHistory = result.messages;
+
+    // Print results
+    console.log(conversationHistory);
   }
   catch (error) {
     console.error(error);
   }
+}
+
+export async function findConversation(name) {
+  try {
+    // Call the conversations.list method using the built-in WebClient
+    const result = await client.conversations.list({
+      // The token you used to initialize your app
+      token: process.env.SLACK_OAUTH_TOKEN
+    });
+
+    for (const channel of result.channels) {
+      if (channel.name === name) {
+        let conversationId = channel.id;
+
+        // Print result
+        console.log("Found conversation ID: " + conversationId);
+        // Store conversation history
+        let conversationHistory;
+        // ID of channel you watch to fetch the history for
+        let channelId = conversationId;
+
+        try {
+          // Call the conversations.history method using WebClient
+          const result = await client.conversations.history({
+            token: process.env.SLACK_OAUTH_TOKEN,
+            channel: channelId
+          });
+
+          conversationHistory = result.messages;
+
+          // Print results
+          console.log(conversationHistory);
+        }
+        catch (error) {
+          console.error(error);
+        }
+        // Break from for loop
+        break;
+      }
+    }
+  }
+  catch (error) {
+    console.error(error);
+  }
+}
+
+export async function getMessages(channelName, thread) {
+  try {
+    const convoMessages = [];
+    // Call the conversations.list method using the built-in WebClient
+    const result = await client.conversations.list({
+      // The token you used to initialize your app
+      token: process.env.SLACK_OAUTH_TOKEN
+    });
+    for (const channel of result.channels) {
+      if (channel.name === channelName) {
+        try {
+          // Call the conversations.history method using WebClient
+          const { messages } = await client.conversations.replies({
+            token: process.env.SLACK_OAUTH_TOKEN,
+            channel: channel.id,
+            ts: thread,
+          });
+          for (var i = 1; i < messages.length; i++) {
+            if (messages[i].bot_profile) {
+              const msg = {
+                reply: false,
+                type: 'text',
+                text: messages[i].text,
+                user: {
+                  name: "CaseWare Support Team",
+                },
+              };
+              convoMessages.push(msg);
+              console.log("Bot: " + msg.text);
+            } else {
+              const msg = {
+                reply: true,
+                type: 'text',
+                text: messages[i].text,
+                user: {
+                  name: "BLANK",
+                },
+              };
+              convoMessages.push(msg);
+              console.log("User: " + msg.text);
+            }
+          }
+          return convoMessages;
+        } catch (err) {
+          console.log(err);
+        }
+      }
+    }
+  } catch (err) {
+    console.log(err);
+  }
+  return [];
 }
