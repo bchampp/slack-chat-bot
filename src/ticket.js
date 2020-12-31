@@ -1,6 +1,13 @@
 import { publishCreateIssueMessage } from './util/slack';
-import {  createIssue } from './util/jira';
+import { createIssue } from './util/jira';
 import { addTicketToDynamo, deleteTicketFromDynamo, getAllTickets, getQueryTicket } from './util/dynamo';
+
+const responseHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Credentials': true,
+  'Access-Control-Allow-Headers': '*',
+  'Acces-Control-Allow-Methods': '*'
+};
 
 // Endpoint to create a new ticket and post a slack message
 export function createTicket(event, context, callback) {
@@ -24,15 +31,10 @@ export function createTicket(event, context, callback) {
       // Adds Ticket to DynamoDB
       addTicketToDynamo(data);
 
-      const headers = {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Credentials": true
-      };
-
       // Return status code 200 and the newly created item
       const response = {
         statusCode: 200,
-        headers: headers,
+        headers: responseHeaders,
         body: JSON.stringify(
           {
             message: 'Creating a ticket',
@@ -52,12 +54,7 @@ export async function getTicket(event, context, callback) {
   if (!data.firmId) {
     const response = {
       statusCode: 400,
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Credentials': true,
-        'Access-Control-Allow-Headers': '*',
-        'Acces-Control-Allow-Methods': '*'
-      },
+      headers: responseHeaders,
       body: JSON.stringify(
         {
           message: "Please provide a firmId"
@@ -70,12 +67,7 @@ export async function getTicket(event, context, callback) {
     const response = await getQueryTicket(data.firmId, data.ticketId).then(ticket => {
       return {
         statusCode: 200,
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Credentials': true,
-          'Access-Control-Allow-Headers': '*',
-          'Acces-Control-Allow-Methods': '*'
-        },
+        headers: responseHeaders,
         body: JSON.stringify(
           {
             message: "Getting specific firm ticket",
@@ -89,12 +81,7 @@ export async function getTicket(event, context, callback) {
     await getAllTickets(data.firmId).then(tickets => {
       const response = {
         statusCode: 200,
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Credentials': true,
-          'Access-Control-Allow-Headers': '*',
-          'Acces-Control-Allow-Methods': '*'
-        },
+        headers: responseHeaders,
         body: JSON.stringify(
           {
             message: 'Getting all firm tickets',
@@ -116,12 +103,7 @@ export async function deleteTicket(event, context, callback) {
   } else {
     const response = {
       statusCode: 400,
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Credentials': true,
-        'Access-Control-Allow-Headers': '*',
-        'Acces-Control-Allow-Methods': '*'
-      },
+      headers: responseHeaders,
       body: JSON.stringify(
         {
           message: "Please provide a ticketId"
