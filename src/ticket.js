@@ -12,6 +12,10 @@ let successful_response = {
   statusCode: 200,
   headers: responseHeaders,
 };
+let failed_response = {
+  statusCode: 400,
+  headers: responseHeaders,
+};
 
 // Endpoint to create a new ticket and post a slack message
 export function createTicket(event, context, callback) {
@@ -47,46 +51,19 @@ export function createTicket(event, context, callback) {
 export async function getTicket(event, context, callback) {
   const data = JSON.parse(event.body);
   if (!data.firmId) {
-    const response = {
-      statusCode: 400,
-      headers: responseHeaders,
-      body: JSON.stringify(
-        {
-          message: "Please provide a firmId"
-        }
-      )
-    };
-    callback(null, response);
+    failed_response.body = JSON.stringify({ message: "Please provide a firmId" });
+    callback(null, failed_response);
   }
   if (data.ticketId) {
     const response = await getQueryTicket(data.ticketId, data.firmId).then(ticket => {
-      return {
-        statusCode: 200,
-        headers: responseHeaders,
-        body: JSON.stringify(
-          {
-            message: "Getting specific firm ticket",
-            ticket: ticket
-          }
-        )
-      };
+      successful_response.body = JSON.stringify({ message: "Getting specific firm ticket", ticket: ticket });
+      return successful_response;
     });
     callback(null, response);
   } else {
     await getAllTickets(data.firmId).then(tickets => {
-      const response = {
-        statusCode: 200,
-        headers: responseHeaders,
-        body: JSON.stringify(
-          {
-            message: 'Getting all firm tickets',
-            tickets: tickets
-          },
-          null,
-          2
-        )
-      };
-      callback(null, response);
+      successful_response.body = JSON.stringify({ message: 'Getting all firm tickets', tickets: tickets }, null, 2);
+      callback(null, successful_response);
     });
   }
 }
@@ -96,15 +73,7 @@ export async function deleteTicket(event, context, callback) {
   if (data.ticketId) {
     deleteTicketFromDynamo(data.ticketId);
   } else {
-    const response = {
-      statusCode: 400,
-      headers: responseHeaders,
-      body: JSON.stringify(
-        {
-          message: "Please provide a ticketId"
-        }
-      )
-    };
-    callback(null, response);
+    failed_response.body = JSON.stringify({ message: "Please provide a ticketId" });
+    callback(null, failed_response);
   }
 }

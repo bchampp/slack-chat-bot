@@ -20,8 +20,12 @@ export async function publishMessage(channel, data) {
         pretext: "Client Posted New Issue to JIRA",
         title: `JIRA Ticket [${data.id}]`,
         title_link: `${ticket.link}`,
-        text: data.summary,
         fields: [
+          {
+            title: "Summary",
+            value: ticket.summary,
+            short: false
+          },
           {
             title: "Project",
             value: ticket.project,

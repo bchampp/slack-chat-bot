@@ -21,7 +21,6 @@ export async function createIssue(data) {
   const payload = jiraIssueMapper(data);
 >>>>>>> 8a65f44 (bless up)
 
-  console.log(authHeader);
   return fetch(JIRA_CREATE_ISSUE_URL, {
     method: 'POST',
     headers: authHeader,

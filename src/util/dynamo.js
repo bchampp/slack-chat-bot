@@ -30,9 +30,6 @@ export function addTicketToDynamo(data) {
             date: ticket.date
         }
     })
-        .then(result => {
-            console.log(result);
-        })
         .catch(error => {
             console.log(error);
         });
