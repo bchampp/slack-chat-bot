@@ -3,7 +3,7 @@ export function jiraIssueMapper(data) {
     return {
         fields: {
             project: {
-                "id": projectType[data.ticket.project]
+                "id": 14261
             },
             summary: ticket.summary,
             description: ticket.description,
@@ -16,7 +16,7 @@ export function jiraIssueMapper(data) {
             customfield_15151: ticket.expectedBehavior,
             customfield_15140: ticket.actualBehavior,
             customfield_15160: ticket.recreationSteps,
-            customfield_15155: 10,
+            customfield_15155: ticket.usersIdentified,
             customfield_15175: ticket.date,
             customfield_15255: {
                 value: "Cloud 2.0",
@@ -27,10 +27,6 @@ export function jiraIssueMapper(data) {
         }
     };
 }
-
-const projectType = {
-    Distributors: 14261
-};
 
 const issueType = {
     Issue: 32,
