@@ -107,7 +107,7 @@ functions:
     events:
       - http:
           method: 'post'
-          path: 'get-ticket'
+          path: 'delete-ticket'
           cors:
             origin: '*'
             headers:

@@ -19,6 +19,7 @@ export function createTicket(event, context, callback) {
 
       // Sets the slack thread Id
       data.slackThreadId = slackThread;
+      data.ticket.status = "Open";
 
       // Adds Ticket to DynamoDB
       addTicketToDynamo(data);

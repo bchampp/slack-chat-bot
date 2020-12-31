@@ -4,16 +4,16 @@ export function JiraIssueFormatter(data){
             "project":{
                "id":14261
             },
-            summary: "ticket.summary",
-            description: "ticket.description",
+            summary: ticket.summary,
+            description: ticket.description,
             issuetype: {
                 "id": 32
             },
-            customfield_15151: "ticket.expectedBehavior",
-            customfield_15140: "ticket.actualBehavior",
-            customfield_15160: "ticket.recreationSteps",
+            customfield_15151: ticket.expectedBehavior,
+            customfield_15140: ticket.actualBehavior,
+            customfield_15160: ticket.recreationSteps,
             customfield_15155: 10,
-            customfield_15175: "ticket.issueDate",
+            customfield_15175: ticket.issueDate,
             customfield_15255: {
                 value: "Cloud 2.0",
                 child: {
