@@ -8,6 +8,10 @@ const responseHeaders = {
   'Access-Control-Allow-Headers': '*',
   'Acces-Control-Allow-Methods': '*'
 };
+let successful_response = {
+  statusCode: 200,
+  headers: responseHeaders,
+};
 
 // Endpoint to create a new ticket and post a slack message
 export function createTicket(event, context, callback) {
@@ -32,18 +36,9 @@ export function createTicket(event, context, callback) {
       addTicketToDynamo(data);
 
       // Return status code 200 and the newly created item
-      const response = {
-        statusCode: 200,
-        headers: responseHeaders,
-        body: JSON.stringify(
-          {
-            message: 'Creating a ticket',
-          },
-          null,
-          2
-        ),
-      };
-      callback(null, response);
+      successful_response.body = JSON.stringify({ message: 'Creating a ticket', }, null, 2);
+
+      callback(null, successful_response);
     });
   });
 }
