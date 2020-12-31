@@ -9,6 +9,12 @@ export async function post(event, context, callback) {
     console.log("Please provide a body with thread and message");
     const response = {
       statusCode: 400,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': true,
+        'Access-Control-Allow-Headers': '*',
+        'Acces-Control-Allow-Methods': '*'
+      },
       body: JSON.stringify(
         {
           message: 'Thread or message not provided in request',
@@ -23,6 +29,12 @@ export async function post(event, context, callback) {
   postInThread(channel, data.thread, data.message);
   const response = {
     statusCode: 200,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Credentials': true,
+      'Access-Control-Allow-Headers': '*',
+      'Acces-Control-Allow-Methods': '*'
+    },
     body: JSON.stringify(
       {
         message: 'Posting message in thread',
@@ -40,6 +52,12 @@ export async function get(event, context, callback) {
     console.log("Please provide a body with ticketId");
     const response = {
       statusCode: 400,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': true,
+        'Access-Control-Allow-Headers': '*',
+        'Acces-Control-Allow-Methods': '*'
+      },
       body: JSON.stringify(
         {
           message: 'Thread not provided in request',
