@@ -28,7 +28,7 @@ export async function post(event, context, callback) {
   }
   const data = JSON.parse(event.body);
 
-  publishClientMessage(data.message, data.id);
+  publishClientMessage(data.message, data.ticketId);
 
   const response = {
     statusCode: 200,

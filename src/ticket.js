@@ -64,7 +64,7 @@ export async function getTicket(event, context, callback) {
     callback(null, response);
   }
   if (data.ticketId) {
-    const response = await getQueryTicket(data.firmId, data.ticketId).then(ticket => {
+    const response = await getQueryTicket(data.ticketId, data.firmId).then(ticket => {
       return {
         statusCode: 200,
         headers: responseHeaders,
