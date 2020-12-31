@@ -11,7 +11,7 @@ export function jiraIssueMapper(data) {
                 "id": issueType[data.ticket.issueType]
             },
             priority: {
-                "id":   priorityType[data.ticket.priority]
+                "id": priorityType[data.ticket.priority]
             },
             customfield_15151: ticket.expectedBehavior,
             customfield_15140: ticket.actualBehavior,
