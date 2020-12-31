@@ -19,9 +19,9 @@ export function jiraIssueMapper(data) {
             customfield_15155: ticket.usersIdentified,
             customfield_15175: ticket.date,
             customfield_15255: {
-                value: "Cloud 2.0",
+                value: ticket.component.value,
                 child: {
-                    value: "Firm Settings"
+                    value: ticket.component.child.value
                 }
             }
         }
