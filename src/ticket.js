@@ -4,7 +4,7 @@ import { addTicketToDynamo, deleteTicketFromDynamo, getAllTickets, getQueryTicke
 
 // Endpoint to create a new ticket and post a slack message
 export function createTicket(event, context, callback) {
-  const data = JSON.parse(event.body);
+  let data = JSON.parse(event.body);
 
   // Creates Issue on JIRA
   createIssue(data).then((response) => {

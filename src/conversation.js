@@ -1,3 +1,4 @@
+import { getQueryTicket } from './util/dynamo';
 import { getMessages, postInThread } from './util/slack';
 
 const channel = "general";
@@ -36,7 +37,7 @@ export async function post(event, context, callback) {
 // Endpoint to get an array of all messages in a thread
 export async function get(event, context, callback) {
   if (!event.body) {
-    console.log("Please provide a body with thread");
+    console.log("Please provide a body with ticketId");
     const response = {
       statusCode: 400,
       body: JSON.stringify(

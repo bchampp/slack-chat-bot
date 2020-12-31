@@ -61,11 +61,25 @@ export const TicketSchema = new DynamoDB.Schema({
             required: true
         },
         component: {
-            type: String,
-            required: true
+            type: Object,
+            schema: {
+                value: {
+                    type: String,
+                    required: true
+                },
+                child:{
+                    type: Object,
+                    schema: {
+                        value: {
+                            type: String,
+                            required: true
+                        }
+                    }
+                }
+            }
         },
         usersIdentified:{
-            type: String,
+            type: Number,
             required: true
         },
         expectedBehavior: {

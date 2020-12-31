@@ -14,8 +14,12 @@ const JIRA_CREATE_ISSUE_URL = `https://bugs.caseware.com/rest/api/2/issue/`;
 
 // Create a JIRA Ticket
 export async function createIssue(data) {
+<<<<<<< HEAD
   const payload = JiraIssueFormatter(data);
   console.log(payload);
+=======
+  const payload = jiraIssueMapper(data);
+>>>>>>> 8a65f44 (bless up)
 
   console.log(authHeader);
   return fetch(JIRA_CREATE_ISSUE_URL, {

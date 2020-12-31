@@ -67,9 +67,13 @@ export async function getQueryTicket(firmId, query) {
     const unformattedTickets = await ticketsTable.scan().exec().catch(err => {
         console.log(err);
     });
+    if (!unformattedTickets) {
+        return {};
+    }
     for(var i = 0; i < unformattedTickets.length; i++){
         const formattedTicket = unformattedTickets[i].toJSON();
         if (formattedTicket.firmId === firmId && formattedTicket.id === query) {
+            console.log(formattedTicket);
             return formattedTicket;
         }
     }
