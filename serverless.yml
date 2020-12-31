@@ -59,13 +59,13 @@ resources:
         AttributeDefinitions:
           - AttributeName: 'id'
             AttributeType: 'S'
-          - AttributeName: userId
+          - AttributeName: firmId
             AttributeType: 'S'
         BillingMode: PAY_PER_REQUEST  # $1.25 per million writes with 40k read/write capacity.      
         GlobalSecondaryIndexes:
-          - IndexName: UserIndex
+          - IndexName: FirmIndex
             KeySchema:
-              - AttributeName: userId
+              - AttributeName: firmId
                 KeyType: HASH
             Projection:
               ProjectionType: KEYS_ONLY
