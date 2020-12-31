@@ -54,7 +54,7 @@ export async function getAllTickets(firmId) {
                 "id": ticket.id,
                 "name": ticket.ticket.summary,
                 "link": ticket.ticket.link,
-                "postDate": ticket.ticket.postDate,
+                "postDate": ticket.ticket.date,
                 "status": ticket.ticket.status,
             };
             allTickets.push(ticketObj);
