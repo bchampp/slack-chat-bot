@@ -19,14 +19,14 @@ Create a `.env` file in the api repository with the following fields.
 |-------- | -----|
 |SLACK_TOKEN | `<your slack bot oauth token`|
 |SLACK_CHANNEL | `<your desired slack channel`|
-|AWS_SECRET_ACCESS_ID | `<your AWS secret access id`> 
-|AWS_SECRET_ACCESS_KEY | `<your AWS secret access key`> 
-
 
 ## Install the dependencies
 Run `npm install`. You may need to run `npm install -g serverless` to install serverless
 
 ## Deploy the stack 
+Ensure that your AWS credentials are configured. There are different ways to do this, see <a href="https://www.serverless.com/framework/docs/providers/aws/guide/credentials/">here!</a>. 
+
+
 Run `sls deploy`. This will deploy the stack to the AWS profile configured in the `.env file`. The output of the deployment should include the REST endpoints for your API. 
 
 ## Integrate with your client!
