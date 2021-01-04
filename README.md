@@ -3,6 +3,13 @@
 This project implements a serverless api template to create a slack-integrated chatbot. 
 A sample client has been provided to demonstrate example integration with the api. 
 
+# API
+|Name | Method | Request | Response|
+|-------- | -------- | -------- | -----|
+|messages | GET | {} | {}|
+|messages | POST | {} | {}|
+
+
 # Getting Started
 
 ## Create a slack bot
@@ -30,5 +37,5 @@ Ensure that your AWS credentials are configured. There are different ways to do 
 Run `sls deploy`. This will deploy the stack to the AWS profile configured in the `.env file`. The output of the deployment should include the REST endpoints for your API. 
 
 ## Integrate with your client!
-Using the REST Api endpoints that were created by deploying your stack, integrate them with your front end code to begin using the slack bot! Check out our example client code <a>here!</a>
+Using the REST Api endpoints that were created by deploying your stack, integrate them with your front end code to begin using the slack bot! Check out our example client code <a>here!</a>.
 <!-- TODO: Link live deployment -->
