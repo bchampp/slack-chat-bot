@@ -1,15 +1,18 @@
-# Slack integrated chat system
+# Slack Integrated Chat System
 
 This project implements a serverless api template to create a slack-integrated chatbot. 
 A sample client has been provided to demonstrate example integration with the api. 
 
+<!-- TODO: Research other open source projects for their READMEs -->
 # API
 |Name | Method | Request | Response|
 |-------- | -------- | -------- | -----|
+<!-- TODO: Update these endpoints -->
 |messages | GET | {} | {}|
 |messages | POST | {} | {}|
 
 
+<!-- TODO: update these to have images -->
 # Getting Started
 
 ## Create a slack bot
@@ -39,3 +42,10 @@ Run `sls deploy`. This will deploy the stack to the AWS profile configured in th
 ## Integrate with your client!
 Using the REST Api endpoints that were created by deploying your stack, integrate them with your front end code to begin using the slack bot! Check out our example client code <a>here!</a>.
 <!-- TODO: Link live deployment -->
+
+## Authors
+- Brent Champion
+- Michael Pereira
+
+## License
+This project is licensed under the MIT License. See the [License](./LICENSE) file for details.
