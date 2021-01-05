@@ -1,6 +1,6 @@
 /* JIRA Support Implementation */
 import fetch from 'cross-fetch';
-import {jiraIssueMapper} from './jira-issue-mapper';
+import {jiraIssueUtil} from './jira-issue-util';
 
 const authHeader = {
     'Authorization': `Basic ${Buffer.from(
@@ -14,7 +14,7 @@ const JIRA_CREATE_ISSUE_URL = ``;
 
 // Create a JIRA Ticket
 export async function createIssue(data) {
-    const payload = jiraIssueMapper(data);
+    const payload = jiraIssueUtil(data);
 
     return fetch(JIRA_CREATE_ISSUE_URL, {
         method: 'POST',

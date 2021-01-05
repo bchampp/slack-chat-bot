@@ -1,4 +1,4 @@
-export function jiraIssueMapper(data) {
+export function jiraIssueUtil(data) {
     const ticket = data.ticket;
     return {
         fields: {

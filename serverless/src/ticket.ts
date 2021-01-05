@@ -1,6 +1,6 @@
-import { publishMessage } from './util/slack';
-import { createIssue } from './util/jira';
-import { addTicketToDynamo, deleteTicketFromDynamo, getAllTickets, getQueryTicket } from './util/dynamo';
+import { publishMessage } from './util/slack-util';
+import { createIssue } from './util/jira-util';
+import { addTicketToDynamo, deleteTicketFromDynamo, getAllTickets, getQueryTicket } from './util/ticket-processor-util';
 
 const responseHeaders = {
   'Access-Control-Allow-Origin': '*',

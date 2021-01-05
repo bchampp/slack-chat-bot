@@ -1,5 +1,5 @@
-import {getQueryTicket} from './util/dynamo';
-import {getMessages, postInThread} from './util/slack';
+import {getQueryTicket} from './util/ticket-processor-util';
+import {getMessages, postInThread} from './util/slack-util';
 
 const channel = "general";
 const responseHeaders = {
