@@ -5,7 +5,7 @@
   "main": "src",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node ."
+    "start": "ts-node "
   },
   "repository": {
     "type": "git",
@@ -18,7 +18,7 @@
     "axios": "^0.21.1",
     "cross-fetch": "^3.0.6",
     "dotenv": "^8.2.0",
-    "dynamoose": "^2.5.0",
+    "dynamoose": "^2.4.1",
     "esm": "^3.2.25",
     "node-fetch": "^2.6.1",
     "serverless-bundle": "^4.1.0",

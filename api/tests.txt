@@ -1,4 +1,0 @@
-sls invoke local --function createTicket --path mocks/create/create-event.json
-sls invoke local --function getTicket
-sls invoke local --function postMessage
-sls invoke local --function getConversation

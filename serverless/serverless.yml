@@ -59,16 +59,7 @@ resources:
         AttributeDefinitions:
           - AttributeName: 'id'
             AttributeType: 'S'
-          - AttributeName: firmId
-            AttributeType: 'S'
-        BillingMode: PAY_PER_REQUEST  # $1.25 per million writes with 40k read/write capacity.      
-        GlobalSecondaryIndexes:
-          - IndexName: FirmIndex
-            KeySchema:
-              - AttributeName: firmId
-                KeyType: HASH
-            Projection:
-              ProjectionType: KEYS_ONLY
+        BillingMode: PAY_PER_REQUEST  # $1.25 per million writes with 40k read/write capacity.
   
 functions:
   createTicket:
