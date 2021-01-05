@@ -12,6 +12,7 @@ export async function publishMessage(channel, data) {
     return client.chat.postMessage({
         token: process.env.SLACK_OAUTH_TOKEN,
         channel: channel,
+        text: "",
         attachments: [
             {
                 color: "#F8E419",
@@ -50,7 +51,7 @@ export async function publishMessage(channel, data) {
                         short: true
                     }
                 ],
-                ts: Date.now()
+                ts: Date.now().toString()
             }
         ]
     }).then((message) => {
