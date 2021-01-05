@@ -1,7 +1,7 @@
-import dynamoDB from "dynamoose";
+import * as DynamoDB from "dynamoose";
 import { TicketSchema } from "../models/ticket-schema";
 
-const ticketsTable = dynamoDB.model("support-bot-user-tickets", TicketSchema);
+const ticketsTable = DynamoDB.model("support-bot-user-tickets", TicketSchema);
 
 export function addTicketToDynamo(data) {
     const ticket = data.ticket;
