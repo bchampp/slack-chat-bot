@@ -1,7 +1,7 @@
-import DynamoDB from "dynamoose";
+import * as DynamoDB from "dynamoose";
 
 export const TicketSchema = new DynamoDB.Schema({
-    id: { //Ticket Number
+    id: { //Jira Ticket Number
         type: String,
         required: true
     },

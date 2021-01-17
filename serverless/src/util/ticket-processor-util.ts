@@ -1,7 +1,7 @@
-import dynamoDB from "dynamoose";
-import { TicketSchema } from "../models/ticket-schema";
+import * as DynamoDB from "dynamoose";
+import {TicketSchema} from "../models/ticket-schema";
 
-const ticketsTable = dynamoDB.model("support-bot-user-tickets", TicketSchema);
+const ticketsTable = DynamoDB.model("support-bot-user-tickets", TicketSchema);
 
 export function addTicketToDynamo(data) {
     const ticket = data.ticket;
@@ -36,7 +36,7 @@ export function addTicketToDynamo(data) {
 }
 
 export function deleteTicketFromDynamo(id) {
-    ticketsTable.delete({ id: id }).catch(err => console.log(err));
+    ticketsTable.delete({id: id}).catch(err => console.log(err));
 }
 
 export async function getAllTickets(firmId) {
@@ -57,9 +57,9 @@ export async function getAllTickets(firmId) {
 }
 
 export async function getQueryTicket(id, firmId) {
-    return await ticketsTable.get({ "id": id, "firmId": firmId });
+    return await ticketsTable.get({"id": id, "firmId": firmId});
 }
 
 export async function getTicket(id) {
-    return await ticketsTable.get({ "id": id });
+    return await ticketsTable.get({"id": id});
 }

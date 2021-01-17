@@ -1,18 +1,18 @@
-import { publishCreateIssueMessage } from './util/slack';
-import { createIssue } from './util/jira';
-import { addTicketToDynamo, deleteTicketFromDynamo, getAllTickets, getQueryTicket } from './util/dynamo';
+import { publishMessage } from './util/slack-util';
+import { createIssue } from './util/jira-util';
+import { addTicketToDynamo, deleteTicketFromDynamo, getAllTickets, getQueryTicket } from './util/ticket-processor-util';
 
 const responseHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Credentials': true,
   'Access-Control-Allow-Headers': '*',
-  'Acces-Control-Allow-Methods': '*'
+  'Access-Control-Allow-Methods': '*'
 };
-let successful_response = {
+let successful_response: any = {
   statusCode: 200,
   headers: responseHeaders,
 };
-let failed_response = {
+let failed_response: any = {
   statusCode: 400,
   headers: responseHeaders,
 };
@@ -22,7 +22,7 @@ export function createTicket(event, context, callback) {
   let data = JSON.parse(event.body);
 
   // Creates Issue on JIRA
-  createIssue(data).then((response) => {
+  createIssue(data).then((response: any) => {
     const jiraData = JSON.parse(response);
 
     // Sets ticket Id and link to JIRA ticket
@@ -30,7 +30,7 @@ export function createTicket(event, context, callback) {
     data.ticket.link = `https://bugs.caseware.com/browse/${jiraData.key}`;
 
     // OnCall Bot Messages the Slack Channel
-    publishCreateIssueMessage(data).then((slackThread) => {
+    publishMessage("channel", data).then((slackThread) => {
 
       // Sets the slack thread Id
       data.slackThreadId = slackThread;
