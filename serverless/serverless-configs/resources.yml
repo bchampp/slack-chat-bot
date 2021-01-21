@@ -1,0 +1,30 @@
+Resources:
+  GatewayResponseDefault4XX:
+    Type: 'AWS::ApiGateway::GatewayResponse'
+    Properties:
+      ResponseParameters:
+        gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+        gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
+      ResponseType: DEFAULT_4XX
+      RestApiId:
+        Ref: 'ApiGatewayRestApi'
+    GatewayResponseDefault5XX:
+      Type: 'AWS::ApiGateway::GatewayResponse'
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
+        ResponseType: DEFAULT_5XX
+        RestApiId:
+          Ref: 'ApiGatewayRestApi'
+    SupportBot:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        TableName: support-bot-sessions
+        KeySchema:
+          - AttributeName: 'id'
+            KeyType: 'HASH'
+        AttributeDefinitions:
+          - AttributeName: 'id'
+            AttributeType: 'S'
+        BillingMode: PAY_PER_REQUEST  # $1.25 per million writes with 40k read/write capacity.

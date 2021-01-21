@@ -1,0 +1,44 @@
+createSession:
+  handler: 'src/handlers/session.createSession'
+  description: "Create a chat support session"
+  events:
+    - http:
+        method: 'post'
+        path: 'post-ticket'
+        cors:
+          origin: '*'
+          headers:
+            - Access-Control-Allow-Credentials
+            - Access-Control-Allow-Headers
+            - Access-Control-Allow-Methods
+            - Access-Control-Allow-Origin
+
+getMessages:
+  handler: 'src/handlers/session.getMessages'
+  description: "Get all session message "
+  events:
+    - http:
+        method: 'post'
+        path: 'get-ticket'
+        cors:
+          origin: '*'
+          headers:
+            - Access-Control-Allow-Credentials
+            - Access-Control-Allow-Headers
+            - Access-Control-Allow-Methods
+            - Access-Control-Allow-Origin
+
+postMessage:
+  handler: 'src/handlers/getMessages.postMessage'
+  description: "Post a slack message from the client"
+  events:
+    - http:
+      method: 'post'
+      path: 'post-message'
+      cors:
+        origin: '*'
+        headers:
+          - Access-Control-Allow-Credentials
+          - Access-Control-Allow-Headers
+          - Access-Control-Allow-Methods
+          - Access-Control-Allow-Origin

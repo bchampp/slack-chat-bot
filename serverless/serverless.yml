@@ -6,14 +6,22 @@ package:
   individually: true
 
 plugins:
-  - serverless-bundle # Package our functions with Webpack
+  - serverless-webpack
   - serverless-offline
   - serverless-dotenv-plugin # Load .env as environment variables
+
+custom:
+  webpack:
+    webpackConfig: './webpack.config.js'
+    includeModules:
+      forceExclude:
+        -aws-sdk
 
 provider:
   name: aws
   runtime: nodejs12.x
   stage: dev
+  region: us-east-1
 
   iamRoleStatements:
     - Effect: Allow
@@ -28,111 +36,6 @@ provider:
       # Restrict our IAM role permissions to
       # the specific table for the stage
       Resource: "arn:aws:dynamodb:*:*:*"
-      
-resources:
-  Resources:
-    GatewayResponseDefault4XX:
-      Type: 'AWS::ApiGateway::GatewayResponse'
-      Properties:
-        ResponseParameters:
-          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
-          gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
-        ResponseType: DEFAULT_4XX
-        RestApiId:
-          Ref: 'ApiGatewayRestApi'
-    GatewayResponseDefault5XX:
-      Type: 'AWS::ApiGateway::GatewayResponse'
-      Properties:
-        ResponseParameters:
-          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
-          gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
-        ResponseType: DEFAULT_5XX
-        RestApiId:
-          Ref: 'ApiGatewayRestApi'
-    SupportBot:
-      Type: 'AWS::DynamoDB::Table'
-      Properties:
-        TableName: support-bot-user-tickets
-        KeySchema:
-          - AttributeName: 'id'
-            KeyType: 'HASH'
-        AttributeDefinitions:
-          - AttributeName: 'id'
-            AttributeType: 'S'
-        BillingMode: PAY_PER_REQUEST  # $1.25 per million writes with 40k read/write capacity.
-  
-functions:
-  createTicket:
-    handler: 'src/ticket.createTicket'
-    description: "Create a Jira ticket and post a slack message"
-    events: 
-      - http:
-          method: 'post'
-          path: 'post-ticket'
-          cors: 
-            origin: '*'
-            headers:
-            - Access-Control-Allow-Credentials
-            - Access-Control-Allow-Headers
-            - Access-Control-Allow-Methods
-            - Access-Control-Allow-Origin
-  
-  getTicket:
-    handler: 'src/ticket.getTicket'
-    description: "Get all support tickets for a firm or a specific ticket ID"
-    events:
-      - http:
-          method: 'post'
-          path: 'get-ticket'
-          cors: 
-            origin: '*'
-            headers:
-            - Access-Control-Allow-Credentials
-            - Access-Control-Allow-Headers
-            - Access-Control-Allow-Methods
-            - Access-Control-Allow-Origin
 
-  deleteTicket:
-    handler: 'src/ticket.deleteTicket'
-    description: "Delete a given ticketId"
-    events:
-      - http:
-          method: 'post'
-          path: 'delete-ticket'
-          cors:
-            origin: '*'
-            headers:
-            - Access-Control-Allow-Credentials
-            - Access-Control-Allow-Headers
-            - Access-Control-Allow-Methods
-            - Access-Control-Allow-Origin
-
-  postMessage:
-    handler: 'src/conversation.post'
-    description: "Post a slack message from the client"
-    events: 
-      - http:
-          method: 'post'
-          path: 'post-message'
-          cors: 
-            origin: '*'
-            headers:
-            - Access-Control-Allow-Credentials
-            - Access-Control-Allow-Headers
-            - Access-Control-Allow-Methods
-            - Access-Control-Allow-Origin
-
-  getMessages:
-    handler: 'src/conversation.get'
-    description: "Get a conversation from the database pertaining to a specific ticket"
-    events: 
-      - http:
-          method: 'post'
-          path: 'get-message'
-          cors: 
-            origin: '*'
-            headers:
-            - Access-Control-Allow-Credentials
-            - Access-Control-Allow-Headers
-            - Access-Control-Allow-Methods
-            - Access-Control-Allow-Origin
+functions: ${file(serverless-configs/functions.yml)}
+resources: ${file(serverless-configs/resources.yml)}
