@@ -9,7 +9,7 @@ const sessionTable = DynamoDB.model("support-bot-user-tickets", SessionSchema);
 export function addSessionToDynamo(id: string) {
     sessionTable.create({
         id: id,
-        date: Date.now()
+        date: Date.now().toString()
     })
         .catch(error => {
             console.log(error);

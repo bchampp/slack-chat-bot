@@ -7,13 +7,16 @@ import {
     publishMessage
 } from "../utils/slack-processor-util";
 import MessageUtil from "../utils/response-message-util";
+import {CreateSession} from "../models/create-session";
+import {PostMessage} from "../models/post-message";
+import {GetMessages} from "../models/get-messages";
 
 /**
  * Initializes Session
  */
 export const createSession: Handler = async (event) => {
     try {
-        const data = JSON.parse(event.body);
+        const data: CreateSession = JSON.parse(event.body);
 
         const sessionId: string = await createSessionChannel(data.message);
 
@@ -32,7 +35,7 @@ export const createSession: Handler = async (event) => {
  */
 export const postMessage: Handler = async (event) => {
     try {
-        const data = JSON.parse(event.body);
+        const data: PostMessage = JSON.parse(event.body);
 
         await publishMessage(data.sessionId, data.message);
 
@@ -48,9 +51,9 @@ export const postMessage: Handler = async (event) => {
  */
 export const getMessages: Handler = async (event) => {
     try {
-        const sessionId: string = JSON.parse(event.body);
+        const data: GetMessages = JSON.parse(event.body);
 
-        const messages: any = getSessionMessages(sessionId);
+        const messages: any = getSessionMessages(data.sessionId);
 
         return MessageUtil.success(200, 'Messages retrieved from the session', {conversation: messages});
     } catch (Exception) {

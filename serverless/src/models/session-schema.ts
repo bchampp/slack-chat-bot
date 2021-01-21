@@ -6,7 +6,7 @@ export const SessionSchema = new DynamoDB.Schema({
         required: true
     },
     date: {
-        type: Number,
+        type: String,
         required: true
     },
 });
