@@ -1,4 +1,4 @@
-export class ResponseVO {
+export class Response {
     statusCode: number;
     body: string;
 }

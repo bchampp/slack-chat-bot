@@ -1,4 +1,4 @@
-import {ResponseVO} from "../models/vo/responseVO";
+import {Response} from "../models/response";
 import {headers} from "../constants/headers";
 
 class Result {
@@ -30,13 +30,13 @@ export default class MessageUtil {
         statusCode: number,
         message = "Success",
         data?: object
-    ): ResponseVO {
+    ): Response {
         const result: Result = new Result(statusCode, message, data);
 
         return result.response();
     }
 
-    static error(statusCode: number, message = "Error"): ResponseVO {
+    static error(statusCode: number, message = "Error"): Response {
         const result: Result = new Result(statusCode, message);
 
         return result.response();

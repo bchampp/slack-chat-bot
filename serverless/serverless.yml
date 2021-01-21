@@ -10,7 +10,6 @@ plugins:
   - serverless-offline
   - serverless-dotenv-plugin # Load .env as environment variables
 
-
 custom:
   webpack:
     webpackConfig: './webpack.config.js'

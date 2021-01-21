@@ -3,7 +3,7 @@ import {WebClient} from '@slack/web-api';
 
 // Configure client
 const client = new WebClient(process.env.SLACK_OAUTH_TOKEN);
-const supportChannel: string = "support-channel";
+const supportChannel: string = process.env.SUPPORT_CHANNEL;
 
 /**
  * Create session chat with generated UUID
