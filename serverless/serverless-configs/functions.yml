@@ -1,10 +1,10 @@
-createSession:
+createChatSession:
   handler: 'src/handlers/session.createSession'
-  description: "Create a chat support session"
+  description: "Create a chat session from your client. This is invoked when the client posts their first message."
   events:
     - http:
         method: 'post'
-        path: 'post-ticket'
+        path: 'chat'
         cors:
           origin: '*'
           headers:
@@ -15,30 +15,18 @@ createSession:
 
 getMessages:
   handler: 'src/handlers/session.getMessages'
-  description: "Get all session message "
+  description: "Get all session message"
   events:
     - http:
-        method: 'post'
-        path: 'get-ticket'
-        cors:
-          origin: '*'
-          headers:
-            - Access-Control-Allow-Credentials
-            - Access-Control-Allow-Headers
-            - Access-Control-Allow-Methods
-            - Access-Control-Allow-Origin
+        method: 'get'
+        path: 'chat/{id}'
+        cors: true
 
 postMessage:
-  handler: 'src/handlers/getMessages.postMessage'
+  handler: 'src/handlers/session.postMessage'
   description: "Post a slack message from the client"
   events:
     - http:
-      method: 'post'
-      path: 'post-message'
-      cors:
-        origin: '*'
-        headers:
-          - Access-Control-Allow-Credentials
-          - Access-Control-Allow-Headers
-          - Access-Control-Allow-Methods
-          - Access-Control-Allow-Origin
+        method: 'patch'
+        path: 'chat'
+        cors: true

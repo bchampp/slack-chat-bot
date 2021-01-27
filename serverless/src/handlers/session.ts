@@ -1,37 +1,40 @@
 import {Handler} from "aws-lambda";
-import {addSessionToDynamo} from '../utils/session-processor-util';
+import * as uuid from "uuid";
+
 import {
     createSessionChannel,
     getSessionMessages,
     postInSupportChannel,
     publishMessage
-} from "../utils/slack-processor-util";
-import MessageUtil from "../utils/response-message-util";
-import {CreateSession} from "../models/create-session";
+} from "../utils/slack-processor";
+import MessageUtil from "../utils/response-message";
 import {PostMessage} from "../models/post-message";
-import {GetMessages} from "../models/get-messages";
 
 /**
  * Initializes Session
  */
 export const createSession: Handler = async (event) => {
-    try {
-        const data: CreateSession = JSON.parse(event.body);
+    const data = JSON.parse(event.body);
 
-        const sessionId: string = await createSessionChannel(data.message);
-
-        await postInSupportChannel(sessionId, data.message);
-        addSessionToDynamo(sessionId);
-
-        return MessageUtil.success(200, 'Posting message in channel');
-    } catch (Exception) {
-        console.log("Please provide a body with the channel and message");
-        return MessageUtil.error(400, 'Thread or message not provided in request');
+    /* Validate the request */
+    if (!data) {
+        return MessageUtil.error(400, 'Body not passed in the request');
     }
+
+    if (!data.message) {
+        return MessageUtil.error(400, 'Field message missing in the request body!');
+    }
+    
+    const sessionName = uuid.v4()
+    const sessionId: string = await createSessionChannel(data.message, sessionName); // Create a new channel for the chat session
+    await postInSupportChannel(sessionName, data.message); // Post in the general support channel that a new session has been created
+    const result = MessageUtil.success(200, 'Succesfully created new chat session!', { sessionId });
+    console.log(result);
+    return result;
 }
 
 /**
- * Posts client's message
+ * Posts a message to the slack session channel on behalf of the client. 
  */
 export const postMessage: Handler = async (event) => {
     try {
@@ -50,14 +53,12 @@ export const postMessage: Handler = async (event) => {
  * Gets all messages from session on slack
  */
 export const getMessages: Handler = async (event) => {
-    try {
-        const data: GetMessages = JSON.parse(event.body);
+    const sessionId = event.pathParameters.id; 
 
-        const messages: any = getSessionMessages(data.sessionId);
-
-        return MessageUtil.success(200, 'Messages retrieved from the session', {conversation: messages});
-    } catch (Exception) {
-        console.log("Please provide a body with the session id");
-        return MessageUtil.error(400, 'Session id not found');
+    if (!sessionId) {
+        return MessageUtil.error(400, 'sessionId missing in the request body!');
     }
+
+    const messages: any = await getSessionMessages(sessionId);
+    return MessageUtil.success(200, 'Messages retrieved from the session', { messages });
 }
