@@ -16,11 +16,11 @@ class Result {
     response() {
         return {
             statusCode: this.statusCode,
+            headers: this.headers,
             body: JSON.stringify({
                 message: this.message,
                 data: this.data,
             }),
-            headers: this.headers,
         };
     }
 }
@@ -32,13 +32,11 @@ export default class MessageUtil {
         data?: object
     ): Response {
         const result: Result = new Result(statusCode, message, data);
-
         return result.response();
     }
 
     static error(statusCode: number, message = "Error"): Response {
         const result: Result = new Result(statusCode, message);
-
         return result.response();
     }
 }

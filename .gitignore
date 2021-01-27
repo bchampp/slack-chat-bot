@@ -7,3 +7,5 @@ jspm_packages
 .webpack
 .vscode
 .env
+# Local Netlify folder
+.netlify
