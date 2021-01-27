@@ -51,7 +51,7 @@ function App() {
     }
 
     return () => clearInterval(interval);
-  }, []);
+  }, [sessionId]);
 
   const handleNewUserMessage = async (response) => {
     console.log(`New user message incoming! ${response}`);
