@@ -1,5 +1,7 @@
 # Slack integrated chat system
 
+[![Netlify Status](https://api.netlify.com/api/v1/badges/6acb4ac5-9420-4f05-8952-fc6ba745d870/deploy-status)](https://app.netlify.com/sites/slackchatbot/deploys)
+
 This project implements an AWS Lambda Serverless API template to create a slack-integrated chatbot. A sample client has been provided to demonstrate example integration with the API.
 We've connected the demo to our own sample slack workspace to interact with chat users. 
 
